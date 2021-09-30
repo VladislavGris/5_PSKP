@@ -9,10 +9,10 @@
 .history/
 
 # Documents
-.doc
-.docx
-.DOCX
-.pdf
+*.doc
+*.docx
+*.DOCX
+*.pdf
 
 # Archives
-.zip
+*.zip
