@@ -4,13 +4,6 @@ const fs = require('fs');
 const url_base = 'http://localhost:5000';
 var fact = (k)=>{return (k === 0 ? 1 : fact(k-1) * k); };
 
-function Factorial(k, cb){
-    this.fn = k;
-    this.ffact = fact;
-    this.fcb = cb;
-    this.calc = ()=>{process.nextTick(()=>{this.fcb(null, this.ffact(this.fn));});};
-}
-
 http.createServer((req,resp)=>{
     let rc = JSON.stringify({k:0});
 
@@ -19,9 +12,7 @@ http.createServer((req,resp)=>{
             let k = parseInt(url.parse(req.url,true).query.k);
             if(Number.isInteger(k)){
                 resp.writeHead(200, {'Content-Type':'application/json;charset=utf-8'});
-                // resp.end(JSON.stringify({k:k, fact:factorial(k)}));
-                let fa = new Factorial(k, (err, result)=>{resp.end(JSON.stringify({k:k, fact:result}));});
-                fa.calc();
+                resp.end(JSON.stringify({k:k, fact:fact(k)}));
             }
         }
     }else if(url.parse(req.url).pathname === '/'){

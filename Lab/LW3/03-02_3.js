@@ -8,7 +8,7 @@ function Factorial(k, cb){
     this.fn = k;
     this.ffact = fact;
     this.fcb = cb;
-    this.calc = ()=>{process.nextTick(()=>{this.fcb(null, this.ffact(this.fn));});};
+    this.calc = ()=>{setImmediate(()=>{this.fcb(null, this.ffact(this.fn));});};
 }
 
 http.createServer((req,resp)=>{
