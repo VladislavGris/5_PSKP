@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database</title>
+    <style>
+        .container{
+            display: flex;
+            flex-direction: row;
+
+        }
+        .container-element{
+            padding: 10px;
+        }
+    </style>
+    <script>
+        function onGetData(){
+            fetch('http://localhost:5000/api/db', {
+                method: 'GET',
+                headers: {'Content-Type':'application/json'}
+            })
+            .then(response => { return response.json(); })
+            .then(pdata => {
+                console.log('pdata', pdata);
+                let tableRef = document.getElementById('data');
+                document.querySelector("tbody").remove();
+                let tbody = document.createElement('tbody')
+                tableRef.appendChild(tbody);
+                let rowId=0;
+                pdata.forEach(element => {
+                    let row = tbody.insertRow(rowId);
+                    row.insertCell(0).innerHTML = element.id;
+                    row.insertCell(1).innerHTML = element.name;
+                    row.insertCell(2).innerHTML = element.bday;
+                    rowId+=1;
+                });
+            });
+        }
+
+        function onInsertData(){
+            let name = document.getElementById('insert_name').value;
+            let date = document.getElementById('insert_date').value;
+            if(name && date){
+                let row = {id:0, name: name, bday: date};
+                fetch('http://localhost:5000/api/db?', {
+                    method: 'POST',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify(row)
+                })
+                .then(response => { return response.json(); })
+                .then(pdata => {
+                    console.log('pdata', pdata);
+                    onGetData();
+                });
+            }else{
+
+            }
+        }
+
+        function onCheckId(){
+            let id = document.getElementById('check_id').value;
+            let error = document.getElementById('check_id_msg');
+            if(id){
+                fetch('http://localhost:5000/api/db?id='+id, {
+                    method: 'GET',
+                    headers: {'Content-Type':'application/json'}
+                })
+                .then(response => { return response.json(); })
+                .then(pdata => {
+                    console.log('pdata', pdata);
+                    if(pdata == -1){
+                        error.innerHTML = 'Id not found';  
+                    }else{
+                        document.getElementById('update_name').value = pdata.name;
+                        document.getElementById('update_date').value = pdata.bday;
+                        error.innerHTML = '';
+                    }
+                });
+            }else{
+                error.innerHTML = 'Id is empty';
+            }
+            
+        }
+
+        function onUpdate(){
+            let id = document.getElementById('check_id').value;
+            let name = document.getElementById('update_name').value;
+            let bday = document.getElementById('update_date').value;
+            let error = document.getElementById('check_id_msg');
+            if(id && name && bday){
+                let row = {id:id, name: name, bday: bday};
+                fetch('http://localhost:5000/api/db', {
+                    method: 'PUT',
+                    headers: {'Content-Type':'application/json'},
+                    body: JSON.stringify(row)
+                })
+                .then(response => { return response.json(); })
+                .then(pdata => {
+                    console.log('pdata', pdata);
+                    onGetData();
+                });
+            }else{
+                error.innerHTML = 'Fields are empty';
+            }
+        }
+
+        function onDelete(){
+            let idToDelete = document.getElementById('id_to_delete');
+            let error = document.getElementById('delete_error');
+            if(idToDelete.value){
+                console.log('http://localhost:5000/api/db?id=${idToDelete.value}');
+                fetch('http://localhost:5000/api/db?id='+idToDelete.value, {
+                    method: 'DELETE',
+                    headers: {'Content-Type':'application/json'}
+                })
+                .then(response => { return response.json(); })
+                .then(pdata => {
+                    console.log(pdata);
+                    if(pdata == -1)
+                        error.innerHTML = 'Id not found';
+                    else{
+                        error.innerHTML = 'Successfuly deleted';
+                        onGetData();       
+                    }
+                               
+                });
+            }else{
+                error.innerHTML = "Error";
+            }           
+        }
+    </script>
+</head>
+<body>
+    <header><h1>Database</h1></header>
+    <main>
+        <div class="container">
+           <fieldset class="container-element">
+               <legend>Select</legend>
+               <button onclick="onGetData()">Get data</button>
+           </fieldset>
+           <fieldset class="container-element">
+               <legend>Insert</legend>
+               <form>
+                   <label for="insert_name">Name</label>
+                    <input type="text" id="insert_name" name="name" required/><br>
+                    <label for="insert_date">Date</label>
+                    <input type="date" id="insert_date" name="date" required/><br>
+               </form>
+               <button onclick="onInsertData()">Insert</button>
+           </fieldset>
+           <fieldset class="container-element">
+               <legend>Update</legend>
+               <form>
+                   <input type="number" name="id" id="check_id"/>
+               </form>
+               <button onclick="onCheckId()">Check Id</button>
+               <div id="check_id_msg"></div>
+               <form>
+                   <label for="name">Name</label>
+                   <input type="text" id="update_name" name="name"/><br>
+                   <label for="date">Date</label>
+                   <input type="date" id="update_date" name="date"/><br>
+               </form>
+               <button onclick="onUpdate()">Update</button>
+           </fieldset>
+           <fieldset class="container-element">
+               <legend>Delete</legend>
+               <form>
+                   <label for="id_to_delete">Id</label>
+                   <input type="number" name="id" id="id_to_delete" required/><br>
+               </form>
+               <button onclick="onDelete()">Delete</button>
+               <div id="delete_error"></div>
+           </fieldset>
+        </div>
+        <table id="data">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Birth day</td>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
