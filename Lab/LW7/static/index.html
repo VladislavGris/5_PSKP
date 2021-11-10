@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script src="script.js"></script>
+    <title>Static test</title>
+</head>
+<body>
+    <h1>CSS test</h1>
+
+    <p id="js">JS test:</p><br>
+    <img src="image.png"><br>
+    <video src="video.mp4" id="video" controls="controls" width="400"></video><br>
+    <a href="doc.docx">Document</a><br>
+    <div id="json">JSON test:<br></div><br>
+    <div id="xml">XML test:<br></div>
+    <script>
+        js.innerHTML += sum(1,2);
+
+        fetch('http://localhost:5000/xml.xml')
+        .then(resp => resp.text())
+        .then(resp => {xml.innerHTML += resp});
+
+        fetch('http://localhost:5000/json.json')
+        .then(resp => resp.json())
+        .then(resp => json.innerHTML += JSON.stringify(resp));
+    </script>
+</body>
+</html>

@@ -110,6 +110,7 @@ process.stdin.on('readable',()=>{
                 case 'sc':
                     if(sec){
                         if(parseInt(sec) != NaN){
+                            clearInterval(commit_interval);
                             commit_interval = setInterval(()=>{
                                 database.emit('COMMIT');
                             },sec*1000);

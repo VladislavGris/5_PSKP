@@ -16,3 +16,5 @@
 
 # Archives
 *.zip
+
+node_modules/

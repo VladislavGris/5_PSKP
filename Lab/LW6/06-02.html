@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        form  { display: table;      }
+        p     { display: table-row;  }
+        label { display: table-cell; }
+        input { display: table-cell; }
+    </style>
+    
+
+    <title>Mail</title>
+</head>
+<body>
+    <form>
+        <h2>Send mail</h2>
+        <p>
+            <label for="login">Gmail login</label>
+            <input type="email" id="login" name="login"/>
+        </p>
+        <p>
+            <label for="pass">Gmail password</label>
+            <input type="password" id="pass" name="pass"/>
+        </p>
+        <p>
+            <label for="to">To</label>
+            <input type="email" id="to" name="to"/>
+        </p>
+        <p>
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject"/>
+        </p>
+        <p>
+            <label for="text">Message</label>
+            <input type="text" id="text" name="text"/>
+        </p>
+        
+    </form>
+    <button onclick="send()">Send</button>
+    <div id="message"></div>
+    <script>
+        function send(){
+            if(login.value && pass.value && to.value && subject.value && text.value){
+                fetch('http://localhost:5000/', {
+                    method: 'POST',
+                    headers: {	'Content-Type':'application/json',
+                                'Accept':'text/html'
+                    },
+                    body: JSON.stringify({
+                        email: login.value,
+                        pass: pass.value,
+                        to: to.value,
+                        subject: subject.value,
+                        msg: text.value
+                    })
+                }).then(response => response.text())
+                .then(pdata =>{
+                    document.getElementById('message').innerHTML = pdata;
+                });
+            }else{
+                document.getElementById('message').innerHTML = "All fields are required";
+            }
+            
+        }
+    </script>
+</body>
+</html>

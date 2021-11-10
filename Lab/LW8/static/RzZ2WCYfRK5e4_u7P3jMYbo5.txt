@@ -1,0 +1,31 @@
+Abcd0503
+
+/// windows user \\\
+login: orclUsr
+pswd: abcd0503
+
+/// database \\\
+global database name: orcl
+pswd: orcl05DB
+
+ststem password: orclSystem
+sys password: orclSys
+gvacore 12345
+
+database express url: https://DESKTOP-0EUKUTV:5500/em
+
+/// pdb \\\
+
+pdb name: pdb_A
+pdb admin username: pdb_A_admin
+pdb admin password: pdb_A05_admin
+
+pdb_name: GVA_PDB
+pdb admin username: GVA_PDB_Admin
+pdb admin pswd: Admin_123
+
+
+/// pdb user \\\
+
+user: c##cdb_admin
+pswd: abcd0503
