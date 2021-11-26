@@ -6,9 +6,10 @@ http.createServer((request, response)=>{
     request.on('data', (chunk)=>{
         img+=chunk;
         //console.log(chunk.toString('utf-8'));
+        //console.log('---------------------------------------------\n\n\n');
     })
     request.on('end', ()=>{
-        console.log(img.toString('utf-8'));
+        //console.log(img.toString('utf-8'));
         response.writeHead(200, {'Content-Type': 'text/plain; charset=utf-8'});
         response.end(img.toString('utf-8')); 
     })
