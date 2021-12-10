@@ -20,7 +20,6 @@ let server = http.createServer((req,resp)=>{
                 var parm = qs.parse(result);
                 console.log('open');
                 const duplex = WebSocket.createWebSocketStream(websock, {encoding: 'utf-8'});
-                console.log(parm);
                 let rfile = fs.createReadStream(`./${parm['file']}`);
                 rfile.pipe(duplex);
                 resp.writeHead(400,{'Content-Type':'text/html; charset=utf-8'});
