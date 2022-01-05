@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database</title>
+    <style>
+        .container{
+            display: flex;
+            flex-direction: row;
+
+        }
+        .container-element{
+            padding: 10px;
+        }
+    </style>
+    <script>
+        async function Get() {
+        // let errElem = document.getElementById("app_error");
+        // errElem.innerHTML = '';
+        fetch('http://localhost:3000/api/pulpits', {
+            
+            method: 'GET',
+            headers: {'Accept': 'application/json'}
+        }).then(response => {
+                return response.json();
+            })
+            .then(pdata => {
+                
+                console.log('pdata', pdata);
+                let tableRef = document.getElementById('data');
+                document.querySelector("tbody").remove();
+                let tbody = document.createElement('tbody')
+                tableRef.appendChild(tbody);
+                let rowId=0;
+                pdata.forEach(element => {
+                    let row = tbody.insertRow(rowId);
+                    row.insertCell(0).innerHTML = element.PULPIT;
+                    row.insertCell(1).innerHTML = element.PULPIT_NAME;
+                    row.insertCell(2).innerHTML = element.FACULTY;
+                    rowId+=1;
+                });
+            });
+    }
+    
+    function Post() {
+        let PULPIT = document.getElementById("ins_pulpit");
+        let PULPIT_NAME = document.getElementById("ins_pulpit_name");
+        let FACULTY = document.getElementById("ins_faculty");
+        //let errElem = document.getElementById("app_error")
+        fetch('http://localhost:3000/api/pulpits', {
+            method: 'POST',
+            mode: "no-cors",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(
+                {
+                    PULPIT: PULPIT.value,
+                    PULPIT_NAME: PULPIT_NAME.value,
+                    FACULTY: FACULTY.value
+                }
+            )
+        })
+            .then(response => {
+                return response.json();
+            })
+            .then(pdate => {
+                console.log('POST.pdate', pdate);
+                // if (typeof(pdate.error) != 'undefined' && pdate.error != null) {
+                //     errElem.innerHTML = pdate.error;
+                // }
+            }).then(Get());
+
+    }
+    
+    function Delete() {
+        let PULPIT = document.getElementById("del_pulpit");
+        fetch(`http://localhost:3000/api/pulpits/${PULPIT.value}`, {
+            method: 'DELETE',
+            headers: {
+                'Access-Control-Request-Method': 'DELETE'
+            }
+        })
+        .then(Get())
+    }
+
+    function GetByPulpit(){
+        let id = document.getElementById('check_id').value;
+        console.log(`http://localhost:3000/api/pulpits/${id}`);
+        fetch(`http://localhost:3000/api/pulpits/${id}`, {
+            
+            method: 'GET',
+            headers: {'Accept': 'application/json'}
+        }).then(response => {
+                console.log()
+                return response.json();
+            })
+            .then(pdata => {
+                
+                console.log('pdata', pdata);
+                document.getElementById('update_pulp').value = pdata.PULPIT;
+                document.getElementById('update_pulp_name').value = pdata.PULPIT_NAME;
+                document.getElementById('update_fac').value = pdata.FACULTY;
+            });
+    }
+
+    function Put() {
+        let PULPIT = document.getElementById("update_pulp");
+        let PULPIT_NAME = document.getElementById("update_pulp_name");
+        let FACULTY = document.getElementById("update_fac");
+        fetch('http://localhost:3000/api/pulpits', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: JSON. stringify(
+                {
+                    PULPIT: PULPIT.value,
+                    PULPIT_NAME: PULPIT_NAME.value,
+                    FACULTY: FACULTY.value
+                }
+            )
+        })
+        .then(response => {
+            return response.json();
+        })
+        .then(pdate => {
+            console.log('POST.pdata', pdate);
+        })
+        .then(Get());
+    }
+    </script>
+</head>
+<body>
+    <header><h1>Database</h1></header>
+    <main>
+        <div class="container">
+           <fieldset class="container-element">
+               <legend>Select</legend>
+               <button onclick="Get()">Get data</button>
+           </fieldset>
+           <fieldset class="container-element">
+               <legend>Insert</legend>
+               <form>
+                   <label for="ins_pulpit">PULPIT</label>
+                    <input type="text" id="ins_pulpit" name="ins_pulpit" required/><br>
+                    <label for="ins_pulpit_name">PULPIT_NAME</label>
+                    <input type="text" id="ins_pulpit_name" name="ins_pulpit_name" required/><br>
+                    <label for="ins_faculty">FACULTY</label>
+                    <input type="text" id="ins_faculty" name="ins_faculty" required/><br>
+               </form>
+               <button onclick="Post()">Insert</button>
+           </fieldset>
+           <fieldset class="container-element">
+               <legend>Update</legend>
+               <form>
+                   <input type="text" name="id" id="check_id"/>
+               </form>
+               <button onclick="GetByPulpit()">Check Id</button>
+               <div id="check_id_msg"></div>
+               <form>
+                   <label for="update_pulp">PULPIT</label>
+                   <input type="text" id="update_pulp" name="update_pulp"/><br>
+                   <label for="update_pulp_name">PULPIT_NAME</label>
+                   <input type="text" id="update_pulp_name" name="update_pulp_name"/><br>
+                   <label for="update_fac">FACULTY</label>
+                   <input type="text" id="update_fac" name="update_fac"/><br>
+               </form>
+               <button onclick="Put()">Update</button>
+           </fieldset>
+           <fieldset class="container-element">
+               <legend>Delete</legend>
+               <form>
+                   <label for="del_pulpit">PULPIT</label>
+                   <input type="text" name="del_pulpit" id="del_pulpit" required/><br>
+               </form>
+               <button onclick="Delete()">Delete</button>
+               <div id="delete_error"></div>
+           </fieldset>
+        </div>
+        <table id="data">
+            <thead>
+                <tr>
+                    <td>PULPIT</td>
+                    <td>PULPIT_NAME</td>
+                    <td>FACULTY</td>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
