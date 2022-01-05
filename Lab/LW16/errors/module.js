@@ -21,9 +21,7 @@ function IsError(result) {
   this.else = () => {
     return this;
   };
-  console.log(result);
   if (result.errors) {
-    console.log("errors");
     this.then = (cb) => {
       let json = JSON.stringify({ error: result.errors[0].message });
       cb(json);

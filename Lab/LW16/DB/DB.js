@@ -68,7 +68,7 @@ function DB(cb) {
       .query("delete from FACULTY where FACULTY = @f")
       .then((r) => {
         console.log("Deleted ", args);
-        return r.rowsAffected[0] == 0 ? null : args;
+        return r.rowsAffected[0] == 0 ? "false" : "true";
       });
   };
 
@@ -77,7 +77,7 @@ function DB(cb) {
       .input("p", mssql.NVarChar, args.PULPIT)
       .query("delete from PULPIT where PULPIT = @p")
       .then((r) => {
-        return r.rowsAffected[0] == 0 ? null : args;
+        return r.rowsAffected[0] == 0 ? "false" : "true";
       });
   };
 
@@ -86,7 +86,7 @@ function DB(cb) {
       .input("s", mssql.NVarChar, args.SUBJECT)
       .query("delete from SUBJECT where SUBJECT = @s")
       .then((r) => {
-        return r.rowsAffected[0] === 0 ? null : args;
+        return r.rowsAffected[0] === 0 ? "false" : "true";
       });
   };
 
@@ -95,7 +95,7 @@ function DB(cb) {
       .input("t", mssql.NVarChar, args.TEACHER)
       .query("delete from TEACHER where TEACHER = @t")
       .then((r) => {
-        return r.rowsAffected[0] == 0 ? null : args;
+        return r.rowsAffected[0] == 0 ? "false" : "true";
       });
   };
 

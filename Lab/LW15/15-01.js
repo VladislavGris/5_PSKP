@@ -8,14 +8,20 @@ let GET_handler = (req, res) => {
   switch (url.parse(req.url).pathname) {
     case "/api/faculties":
       Db.GetRecordsByTableName("faculty")
-        .then((records) => res.end(JSON.stringify(records)))
+        .then((records) => {
+          console.log(records);
+          res.end(JSON.stringify(records));
+        })
         .catch((error) => {
           write_error_400(res, error);
         });
       break;
     case "/api/pulpits":
       Db.GetRecordsByTableName("pulpit")
-        .then((records) => res.end(JSON.stringify(records)))
+        .then((records) => {
+          console.log(records);
+          res.end(JSON.stringify(records));
+        })
         .catch((error) => {
           write_error_400(res, error);
         });
